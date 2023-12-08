@@ -11,7 +11,7 @@
 const int ANALOGPIN=0;
 
 #define analogLightPin A1
-#define VCC 5.0
+#define Vcc 5.0
 
 #define buzzerPin 9
 
@@ -32,7 +32,7 @@ void setup() {
   lcd.print("hello, world!");
 
   // Wait a maximum of 10s for Serial Monitor
-  while (!debugSerial && millis() < 10000)
+  while (!Serial && millis() < 10000)
     ;
 
   //Initialise the DHT sensor
@@ -54,10 +54,10 @@ void loop() {
   // false: Celsius (default)
   float temperature = dht.readTemperature(false);
 
-  debugSerial.print("Temperature: ");
-  debugSerial.println(temperature);
-  debugSerial.print("Humidity: ");
-  debugSerial.println(humidity);
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
+  Serial.print("Humidity: ");
+  Serial.println(humidity);
 
   float ppm = gasSensor.getPPM();
   Serial.println(ppm);
@@ -81,10 +81,10 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print("C:");
   lcd.setCursor(3, 1);
-  lcd.print(PPm);
+  lcd.print(ppm);
 
 
-  tone(buzzerPin, 1000, 1000);
+  //tone(buzzerPin, 1000, 1000);
   
-  delay(30000);
+  delay(3000);
 }
