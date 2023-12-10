@@ -84,7 +84,7 @@ void loop() {
   lcd.print(ppm);
 
 
-  //tone(buzzerPin, 1000, 1000);
+  tone(buzzerPin, 1000, 1000);
   
   delay(3000);
 }
