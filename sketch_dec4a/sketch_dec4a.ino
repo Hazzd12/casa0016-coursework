@@ -60,31 +60,37 @@ void loop() {
   Serial.println(humidity);
 
   float ppm = gasSensor.getPPM();
+  Serial.print("PPM: ");
   Serial.println(ppm);
 
+  lcd.clear();
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 0);
   lcd.print("T:");
   lcd.setCursor(3, 0);
   lcd.print(temperature);
-  // display x
+  // display 
 
   // set the cursor to column 8, line 1
-  lcd.setCursor(8, 0);
-  lcd.print("H:");
-  lcd.setCursor(11, 0);
-  lcd.print(humidity);
-  // display y
-
-  // set the cursor to column 0, line 2
   lcd.setCursor(0, 1);
-  lcd.print("C:");
+  lcd.print("H:");
   lcd.setCursor(3, 1);
+  lcd.print(humidity);
+  // display
+  delay(3000);
+  lcd.clear();
+  // set the cursor to column 0, line 2
+  lcd.setCursor(0, 0);
+  lcd.print("C:");
+  lcd.setCursor(3, 0);
   lcd.print(ppm);
 
-
-  tone(buzzerPin, 1000, 1000);
+  lcd.setCursor(0, 1);
+  lcd.print("L:");
+  lcd.setCursor(3, 1);
+  lcd.print("Good");
+  //tone(buzzerPin, 1000, 1000);
   
   delay(3000);
 }
