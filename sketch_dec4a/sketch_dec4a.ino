@@ -26,10 +26,10 @@ MQ135 gasSensor = MQ135(ANALOGPIN);
 
 const String errors[7] = {
   "Too much light",
-  "Temperature too low",
-  "Temperature too high",
-  "Humidity too low",
-  "Humidity too high",
+  "T too low",
+  "T too high",
+  "H too low",
+  "H too high",
   "Too much CO2",
   "Bad airtightness"
 };
@@ -84,10 +84,10 @@ void loop() {
     flag = true;
   }
 
-  if (temperature < 15) {
+  if (temperature < 20) {
     results[1] = true;
     flag = true;
-  } else if (temperature > 25) {
+  } else if (temperature > 30) {
     results[2] = true;
     flag = true;
   }
