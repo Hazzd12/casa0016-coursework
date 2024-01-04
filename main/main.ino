@@ -20,17 +20,18 @@ int LightR;
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 
+// set LCD, DHT and MQ135
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 DHT dht(DHTPIN, DHTTYPE);
 MQ135 gasSensor = MQ135(ANALOGPIN);
 
-const String errors[7] = {
-  "Too much light",
+//set the error message
+const String errors[6] = {
+  "Too strong light",
   "T too low",
   "T too high",
   "H too low",
   "H too high",
-  "Too much CO2",
   "Bad airtightness"
 };
 
@@ -79,7 +80,7 @@ void loop() {
   **/
   bool results[7] = { false };
   bool flag = false;
-  if (voltage < 3.4) {
+  if (voltage < 3.8) {
     results[0] = true;
     flag = true;
   }
@@ -87,24 +88,23 @@ void loop() {
   if (temperature < 20) {
     results[1] = true;
     flag = true;
-  } else if (temperature > 30) {
+  } else if (temperature > 32) {
     results[2] = true;
     flag = true;
   }
 
-  if (humidity < 60) {
+  if (humidity < 50) {
     results[3] = true;
     flag = true;
-  } else if (humidity > 95.0) {
+  } else if (humidity > 80) {
     results[4] = true;
     flag = true;
   }
-  //1000ppm ≈ 1.0 g/L, the suitable rang is from 500 to 1000
-  //according to https://atlas-scientific.com/blog/co2-in-wine/
+
   if (ppm > 1000) {
     results[5] = true;
     flag = true;
-  } else if (ppm < 400) {
+  } else if (ppm < 420) {
     results[6] = true;
     flag = true;
   }
@@ -140,9 +140,9 @@ void loop() {
     // set the cursor to column 0, line 2
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("C:");
+    lcd.print("A:");
     lcd.setCursor(3, 0);
-    lcd.print(ppm);
+    lcd.print("Good");
 
     lcd.setCursor(0, 1);
     lcd.print("L:");
