@@ -7,14 +7,12 @@
 #define DHTPIN 7  //Digital Pin 2
 #define DHTTYPE DHT22
 
-
+//define the inner MQ135 pin
 const int InnerPin = 0;
+//define the outer MQ135 pin
 const int OuterPin = 2;
 
-//define the inner MQ135 pin
-#define InnerPin A1
-//define the outer MQ135 pin
-#define OuterPin A3
+#define analogLightPin A1
 #define Vcc 5.0
 
 #define buzzerPin 9
@@ -142,7 +140,7 @@ void loop() {
   OldAvgIn/=10;
 //assess the airtightness
  if (avgOut + 5 > avgIn) {
-    if(OldAvfIn + 0.5 > avgIn){
+    if(OldAvgIn + 0.5 > avgIn){
       results[6] = true;
       flag = true;
     }
