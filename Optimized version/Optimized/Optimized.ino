@@ -7,12 +7,14 @@
 #define DHTPIN 7  //Digital Pin 2
 #define DHTTYPE DHT22
 
-//define the inner MQ135 pin
+
 const int InnerPin = 0;
-//define the outer MQ135 pin
 const int OuterPin = 2;
 
-#define analogLightPin A1
+//define the inner MQ135 pin
+#define InnerPin A1
+//define the outer MQ135 pin
+#define OuterPin A3
 #define Vcc 5.0
 
 #define buzzerPin 9
@@ -24,8 +26,8 @@ const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 // set LCD, DHT and MQ135
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 DHT dht(DHTPIN, DHTTYPE);
-MQ135 OutSensor = MQ135(OutPin);
-MQ135 InSensor = MQ135(InPin);
+MQ135 OutSensor = MQ135(OuterPin);
+MQ135 InSensor = MQ135(InnerPin);
 //set the error message
 const String errors[6] = {
   "Too strong light",
@@ -133,15 +135,17 @@ void loop() {
     int index = Inindex - i;
     index = index<0? index+20: index;
     avgIn += Ins[index];
-    OldAvgIn = 
+    OldAvgIn += Ins[(Inindex + i) % 20]; 
   }
   avgOut/=10;
   avgIn/=10;
+  OldAvgIn/=10;
 //assess the airtightness
  if (avgOut + 5 > avgIn) {
-    int OldAvgIn = 0;
-    results[6] = true;
-    flag = true;
+    if(OldAvfIn + 0.5 > avgIn){
+      results[6] = true;
+      flag = true;
+    }
   }
 
 //display data or error message
