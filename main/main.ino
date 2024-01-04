@@ -7,7 +7,7 @@
 #define DHTPIN 7  //Digital Pin 2
 #define DHTTYPE DHT22
 
-
+//define the MQ135 pin
 const int ANALOGPIN = 0;
 
 #define analogLightPin A1
@@ -16,7 +16,6 @@ const int ANALOGPIN = 0;
 #define buzzerPin 9
 
 int temperature, humidity, ppm;
-int LightR;
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 
@@ -52,10 +51,12 @@ void setup() {
 
 void loop() {
 
+  //get LDR voltage
   float voltage = Vcc * analogRead(analogLightPin) / 1024;
   Serial.print("Voltage is: ");
   Serial.println(voltage);
 
+  //get humidity and temperature
   float humidity = dht.readHumidity(false);
   float temperature = dht.readTemperature(false);
 
@@ -64,6 +65,7 @@ void loop() {
   Serial.print("Humidity: ");
   Serial.println(humidity);
 
+  //get CO2 PPM
   float ppm = gasSensor.getPPM();
   Serial.print("PPM: ");
   Serial.println(ppm);
@@ -75,16 +77,19 @@ void loop() {
   **results[0]==true->errors[0],
   **results[1]==true->errirs[1],
   **......
-  **results[6]==true->errors[6],
+  **results[5]==true->errors[5],
   **if there is any error, flag will be true; or flag will be false
   **/
-  bool results[7] = { false };
+  bool results[6] = { false };
   bool flag = false;
+
+//assess the light
   if (voltage < 3.8) {
     results[0] = true;
     flag = true;
   }
 
+//assess the temperature
   if (temperature < 20) {
     results[1] = true;
     flag = true;
@@ -93,6 +98,7 @@ void loop() {
     flag = true;
   }
 
+//assess the humidity
   if (humidity < 50) {
     results[3] = true;
     flag = true;
@@ -101,17 +107,16 @@ void loop() {
     flag = true;
   }
 
-  if (ppm > 1000) {
-    results[5] = true;
-    flag = true;
-  } else if (ppm < 420) {
+//assess the airtightness
+ if (ppm < 435) {
     results[6] = true;
     flag = true;
   }
 
+//display data or error message
   if (flag) {
-    
-    for(int i=0; i<7; i++){
+    //display error message
+    for(int i=0; i<6; i++){ // Loop all errors
       if(results[i]){
         lcd.clear();
         lcd.setCursor(0, 0);
@@ -125,11 +130,12 @@ void loop() {
     // (note: line 1 is the second row, since counting begins with 0):
     lcd.clear();
     lcd.setCursor(0, 0);
+    // display temperature
     lcd.print("T:");
     lcd.setCursor(3, 0);
     lcd.print(temperature);
 
-    // display
+    // display humidity
     lcd.setCursor(0, 1);
     lcd.print("H:");
     lcd.setCursor(3, 1);
@@ -139,11 +145,13 @@ void loop() {
 
     // set the cursor to column 0, line 2
     lcd.clear();
+    // display airtightness
     lcd.setCursor(0, 0);
     lcd.print("A:");
     lcd.setCursor(3, 0);
     lcd.print("Good");
 
+    // display Light
     lcd.setCursor(0, 1);
     lcd.print("L:");
     lcd.setCursor(3, 1);
